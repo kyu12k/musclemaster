@@ -16,6 +16,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("map");
   const [confirmReset, setConfirmReset] = useState(false);
   const [showQuizPicker, setShowQuizPicker] = useState(false);
+  const [filterGroup, setFilterGroup] = useState(null); // null = 전체
 
   const stats = {
     unseen: muscles.filter((m) => !progress[m.id] || progress[m.id] === "unseen").length,
@@ -135,7 +136,8 @@ export default function App() {
           <div className="flex-1 overflow-y-auto">
             {activeTab === "map" ? (
               <div className="p-4">
-                <div className="flex gap-2 mb-4 justify-center">
+                {/* 전면/후면 토글 */}
+                <div className="flex gap-2 mb-3 justify-center">
                   {[["front", "전면"], ["back", "후면"]].map(([s, label]) => (
                     <button
                       key={s}
@@ -151,7 +153,35 @@ export default function App() {
                   ))}
                 </div>
 
-                <div className="flex gap-4 justify-center mb-4">
+                {/* 그룹 필터 */}
+                <div className="flex gap-1.5 mb-3 overflow-x-auto pb-1 scrollbar-none">
+                  <button
+                    onClick={() => setFilterGroup(null)}
+                    className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                      filterGroup === null
+                        ? "bg-violet-600 text-white"
+                        : "bg-white/8 text-white/50 hover:bg-white/12"
+                    }`}
+                  >
+                    전체
+                  </button>
+                  {groups.map((g) => (
+                    <button
+                      key={g}
+                      onClick={() => setFilterGroup(filterGroup === g ? null : g)}
+                      className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                        filterGroup === g
+                          ? "bg-violet-600 text-white"
+                          : "bg-white/8 text-white/50 hover:bg-white/12"
+                      }`}
+                    >
+                      {g}
+                    </button>
+                  ))}
+                </div>
+
+                {/* 범례 */}
+                <div className="flex gap-4 justify-center mb-3">
                   {[["bg-white/20", "미학습"], ["bg-amber-400", "학습중"], ["bg-emerald-400", "완료"]].map(([cls, label]) => (
                     <div key={label} className="flex items-center gap-1.5">
                       <span className={`w-2 h-2 rounded-full ${cls}`} />
@@ -160,7 +190,7 @@ export default function App() {
                   ))}
                 </div>
 
-                <BodyMap side={bodySide} />
+                <BodyMap side={bodySide} filterGroup={filterGroup} />
                 <p className="text-center text-white/25 text-xs mt-3">근육 영역을 탭해서 카드를 열어보세요</p>
               </div>
             ) : (
