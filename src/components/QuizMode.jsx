@@ -121,7 +121,7 @@ export default function QuizMode() {
         {quizIndex + 1} / {quizQueue.length}
       </p>
 
-      <div className="flex-1 flex flex-col justify-center px-5 gap-5">
+      <div className="flex-1 flex flex-col justify-center px-5 gap-5 pb-safe" style={{ paddingBottom: "max(20px, env(safe-area-inset-bottom))" }}>
         {/* Cue card */}
         <div className="bg-white/5 rounded-2xl p-5 border border-white/10">
           <p className="text-white/40 text-xs uppercase tracking-widest mb-3">필라테스 큐잉</p>
